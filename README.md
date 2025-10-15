@@ -18,7 +18,7 @@
 ## 📘 Overview
 A lightweight, privacy-conscious task manager for **community, family, and non-commercial groups**.  
 Includes a **Swift/Vapor backend**, **web UI**, and **iOS app** for creating groups, assigning tasks/subtasks, scheduling by priority, and simulated reminders.  
-Originally developed as an **A-Level NEA coursework project**. :contentReference[oaicite:0]{index=0}
+Originally developed as an **A-Level NEA coursework project**.
 
 ---
 
@@ -26,27 +26,27 @@ Originally developed as an **A-Level NEA coursework project**. :contentReference
 Coordinating chores or community projects across multiple people can be messy — who does what, by when, and what matters most?  
 **Order Tea** focuses on **clarity and simplicity**, allowing mixed-ability users to collaborate without paywalls or complexity.  
 - Website → overview & schedule view  
-- iOS App → quick task updates & management :contentReference[oaicite:1]{index=1}
+- iOS App → quick task updates & management 
 
 ---
 
 ## 🔑 Key Features
-- **Groups & Roles** – organisers assign; auxiliaries complete (families, clubs, DofE teams, etc.) :contentReference[oaicite:2]{index=2}  
-- **Tasks + Subtasks** – full CRUD on both web and iOS; subtasks aggregate into progress tracking :contentReference[oaicite:3]{index=3}  
+- **Groups & Roles** – organisers assign; auxiliaries complete (families, clubs, DofE teams, etc.)  
+- **Tasks + Subtasks** – full CRUD on both web and iOS; subtasks aggregate into progress tracking 
 - **Scheduling Algorithm** – weighted priority using normalised factors (End Date, Start Date, Assigned Priority, Progress, Access Level) with reorderable weighting :contentReference[oaicite:4]{index=4}  
-- **Auth & Sessions** – salted + hashed passwords, persistent login sessions :contentReference[oaicite:5]{index=5}  
-- **Simulated Notifications** – JSON payloads written to file every 30 min to mimic APNs delivery :contentReference[oaicite:6]{index=6}  
-- **Accessible UI** – consistent design & contrast for inclusive usability :contentReference[oaicite:7]{index=7}
+- **Auth & Sessions** – salted + hashed passwords, persistent login sessions 
+- **Simulated Notifications** – JSON payloads written to file every 30 min to mimic APNs delivery 
+- **Accessible UI** – consistent design & contrast for inclusive usability
 
 ---
 
 ## 🧰 Tech Stack
 | Layer | Technology | Purpose |
 |-------|-------------|----------|
-| **Backend** | Swift + [Vapor](https://vapor.codes) | REST API + HTML (Leaf) + DB integration :contentReference[oaicite:8]{index=8} |
-| **Web** | HTML / CSS / JavaScript (via Leaf) | Interface for management :contentReference[oaicite:9]{index=9} |
-| **iOS** | Swift (UIKit) | Task + Group management, factor control :contentReference[oaicite:10]{index=10} |
-| **Database** | MySQL | Persistent data storage :contentReference[oaicite:11]{index=11} |
+| **Backend** | Swift + [Vapor](https://vapor.codes) | REST API + HTML (Leaf) + DB integration 
+| **Web** | HTML / CSS / JavaScript (via Leaf) | Interface for management 
+| **iOS** | Swift (UIKit) | Task + Group management, factor control
+| **Database** | MySQL | Persistent data storage 
 
 ---
 
