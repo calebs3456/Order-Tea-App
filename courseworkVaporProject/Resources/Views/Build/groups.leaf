@@ -1,0 +1,210 @@
+
+<HTML>
+
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+table {
+    width: 75%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #3399ff;
+    color: white;
+}
+
+.subtask {
+    background-color: #f2f2f2;
+}
+
+input[type="text"], input[type="number"], input[type="datetime-local"], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background-color: #3399ff;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+h1 {
+        text-align: center;
+        font-weight: bold;
+    }
+h2 {
+        text-align: center;
+        font-weight: bold;
+    }
+input[type="submit"]:hover {
+    background-color: #0059b3;
+}
+
+.form-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtask{
+background-color: grey;
+}
+
+</style>
+
+<HEAD>
+<TITLE>Groups </TITLE>
+
+</HEAD>
+
+<BODY>
+
+<form id="logout" method="POST" enctype="application/x-www-form-urlencoded" action="http://127.0.0.1:8080/group/logout">
+<input type ="submit" value="Logout">
+</form>
+
+
+<table style ="width:75%">
+
+<tr>
+
+<th>Group Name</th style="bold">
+<th>Choose</th>
+
+</tr>
+
+
+#for(unit in groups):
+
+<tr>
+<td>#(unit.groupName)</td>
+<td>
+<form id="groupSelectForm" method="POST" action="http://127.0.0.1:8080/group/selectGroup" enctype="application/x-www-form-urlencoded" onSubmit="window.location = 'http://127.0.0.1:8080/group'">
+  
+  <input type="hidden" name="groupID" value=#(unit.id)>
+  <br>
+ 
+  <input type ="submit" value="Select">
+</form>
+
+
+</td>
+<td>
+
+    #for(groupSet in groupSets):
+        #if(groupSet.id == unit.id):
+            #if(groupSet.accessLevel==5):
+                <form id="deleteGroup" method="POST" action="http://127.0.0.1:8080/group/delete" enctype="application/x-www-form-urlencoded" onSubmit="window.location = 'http://127.0.0.1:8080/group'">
+                <input type="hidden" name="groupID" value="#(unit.id)">
+                <input type="submit" value="Delete">
+                </form>
+            #else:
+                <h3>Access level is #(groupSet.accessLevel), so unable to delete group</h3>
+            #endif
+                
+        #endif
+    #endfor
+
+</td>
+
+</tr>
+
+#endfor
+
+ 
+
+
+
+
+</table>
+<H1>Create new Group</H1>
+<form id="createGroupForm" method="POST" action="http://127.0.0.1:8080/group/createGroup" enctype="application/x-www-form-urlencoded">
+  
+  <input type="text" name="groupName" placeholder="Name" maxlength="250">
+  <br>
+  <input type ="submit" value="Submit">
+</form>
+
+<H1>User Details</H1>
+<H2>#(userName)<H2>
+
+<H2>ID: #(userID)<H2>
+
+<br>
+
+<h1>Your Tasks</h1>
+
+<table style ="width:75%">
+
+<tr>
+
+<th>Task Name</th style="bold">
+<th>Description</th>
+<th>Delete</th>
+</tr>
+
+
+#for(unit in allTasks):
+#if(unit.id=="a8f47b52-64fe-11ee-b226-1a6dd2d7c03d-d786629a-6757-11ee-b226-1a6dd2d7c03d"):
+#else:
+
+#if(unit.SubtaskNumber>0):
+<tr class="subtask">
+#else:
+<tr>
+#endif
+<td>#(unit.title)</td>
+<td>#(unit.description)</td>
+
+<td>
+<form id="deleteForm" method="POST" action="http://127.0.0.1:8080/tasks/delete" enctype="application/x-www-form-urlencoded" onSubmit="window.location = 'http://127.0.0.1:8080/tasks'">
+<input type="hidden" value = #(unit.id) name="TaskID">
+<input type="hidden" value = #(unit.SubtaskNumber) name="subtaskNumber">
+<input type ="submit" value="Delete">
+</form>
+</td>
+<td>
+<form id="moreOptionsForm" method="POST" enctype="application/x-www-form-urlencoded" action="http://127.0.0.1:8080/tasks/options">
+<input type="hidden" value = #(unit.id) name="id">
+<input type="hidden" value = #(unit.SubtaskNumber) name="SubtaskNumber">
+<input type ="submit" value="More Options">
+</form>
+</td>
+</tr>
+#endif
+#endfor
+
+
+</table>
+
+<form id="deleteUser" method="POST" enctype="application/x-www-form-urlencoded" action="http://127.0.0.1:8080/user/deleteUser">
+<input type ="submit" value="Delete User">
+</form>
+</BODY>
+
+</HTML>
+

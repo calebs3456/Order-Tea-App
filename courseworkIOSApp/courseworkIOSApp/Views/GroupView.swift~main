@@ -1,0 +1,55 @@
+//
+//  GroupView.swift
+//  courseworkIOSApp
+//
+//  Created by Caleb Saunderson on 07/12/2023.
+//
+
+import SwiftUI
+
+struct GroupView: View {
+    
+    @State public var userID: String = ""
+    
+    @State private var responseDict: [String:String] = ["":""]
+    @State private var specificDict: [String:String] = ["":""]
+    @State private var error: Error?
+    @State private var titleList: [String] = []
+    
+    var body: some View {
+        NavigationView(){
+            ScrollView {
+                ForEach(responseDict.sorted(by: { $0.0 < $1.0 }), id: \.key) { key, value in
+                    Text(key)
+                        .fontWeight(.medium)
+                        .font(.largeTitle)
+                        .foregroundColor(Color.white)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                        .padding()
+                }
+            }
+            
+            
+            
+            Button("Fetch Groups") {
+                returnGroups() { fetchedResponse, fetchedError in
+                    if let fetchedResponse = fetchedResponse {
+                        self.responseDict = fetchedResponse
+                        self.specificDict = self.responseDict ?? ["Failed":"Failed"]
+                        self.error = nil
+                        
+                    } else if let fetchedError = fetchedError {
+                        self.responseDict = ["Failed":"Failed"]
+                        self.error = fetchedError
+                    }
+                }
+                
+            }
+        }
+    }
+}
+
+#Preview {
+    GroupView()
+}

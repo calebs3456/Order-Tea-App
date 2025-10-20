@@ -1,0 +1,246 @@
+
+<HTML>
+<HEAD>
+
+<title>#if(Title) #(Title)</title>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+table {
+    width: 75%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #3399ff;
+    color: white;
+}
+
+.subtask {
+    background-color: #f2f2f2;
+}
+
+input[type="text"], input[type="number"], input[type="datetime-local"], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"], button {
+    width: 100%;
+    background-color: #3399ff;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+h1 {
+        text-align: center;
+        font-weight: bold;
+    }
+h2 {
+        text-align: center;
+        font-weight: bold;
+    }
+input[type="submit"]:hover, button:hover {
+    background-color: #0059b3;
+}
+
+.form-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtask{
+background-color: grey;
+}
+
+#change-factors-list li {
+  margin: 8px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+  cursor: move;
+}
+
+.dragging {
+  opacity: 0.5;
+  background-color: lightblue;
+}
+
+
+</style>
+
+</HEAD>
+
+
+<BODY>
+<form action="http://127.0.0.1:8080/tasks">
+    <input type="submit" value="Go Back" />
+</form>
+
+
+<h1>#if(Title) #(Title) </h1>
+<h2>#if(Description) #(Description) </h2>
+<h2>Assigned From: #if(AssignedFrom) #(AssignedFrom) </h2>
+<h2>Assigned To: #if(AssignedTo) #(AssignedTo)</h2>
+<h2>Start Date: #if(StartDate) #(StartDate)</h2>
+<h2>End Date: #if(EndDate) #(EndDate) </h2>
+<h2>Reminder: #if(Reminder) #(Reminder) </h2>
+<h2>Assigned Priority: #if(AssignedPriority) #(AssignedPriority) </h2>
+
+<h2>Subtask Number: #if(SubtaskNumber) #(SubtaskNumber)</h2>
+<h2>Access Level: #if(AccessLevel) #(AccessLevel)</h2>
+<h2>Complete: #if(Complete) #(Complete)</h2>
+
+
+<form id="updateForm" method="POST" action="http://127.0.0.1:8080/specificTask/update" enctype="application/x-www-form-urlencoded" onSubmit="window.location = 'http://127.0.0.1:8080/tasks'">
+    <input type="hidden" name="TaskID" value=#(TaskID) maxlength="250">
+    <input type="hidden" name="SubtaskNumber" value=#(SubtaskNumber) maxlength="250">
+    <input type="text" name="Title" placeholder="Name" maxlength="250">
+    <br>
+    <input type="text" name="Description" placeholder="Description" maxlength="250">
+    <br>
+    <label for="AssignedTo">Assigned To:</label>
+    <input type="text" id="AssignedToUserSearchUpdate" placeholder="Search users...">
+    <select name="AssignedTo" id="AssignedToUpdate" multiple>
+    #for(user in groupUsers):
+    <option value="#(user.id)">#(user.username)</option>
+    #endfor
+    </select>
+    <br>
+    <h3>Assigned Priority (10 is a high priority and 1 is low)</h3>
+    <input type="number" name="AssignedPriority"  value="0" "min="1" max="10">
+    <br>
+    <h3>Access Level (5 is a high access level and 1 is low)</h3>
+    <input type="number" name="AccessLevel"  value="0" "min="1" max="5">
+    <br>
+    <h3>Start Date</h3>
+    <input type="datetime-local" name="StartDate" placeholder="YYYY-MM-DDTHH:MM">
+    <br>
+    <h3>End Date</h3>
+    <input type="datetime-local" name="EndDate" placeholder="YYYY-MM-DDTHH:MM">
+    <br>
+    <h3>Reminder</h3>
+    <input type="datetime-local" name="Reminder" placeholder="YYYY-MM-DDTHH:MM">
+    <br>
+    <h3>Complete</h3>
+    <input type="checkbox" name = "Complete">
+ 
+    <br>
+    <input type ="submit" value="Update">
+</form>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+#if(SubtaskNumber==0):
+<h3>Create Subtask</h3>
+<form id="createForm" method="POST" action="http://127.0.0.1:8080/specificTask/create" enctype="application/x-www-form-urlencoded" ">
+  
+  <input type="text" name="Title" placeholder="Name" maxlength="250">
+  <br>
+  <input type="text" name="Description" placeholder="Description" maxlength="250">
+  <br>
+  <label for="AssignedTo">Assigned To:</label>
+  <input type="text" id="userSearchAssignedTo" placeholder="Search users...">
+  <select name="AssignedTo" id="AssignedTo" multiple>
+  #for(user in groupUsers):
+  <option value="#(user.id)">#(user.username)</option>
+  #endfor
+  </select>
+  <h3>Assigned Priority (10 is a high priority and 1 is low)</h3>
+  <input type="number" name="AssignedPriority"  min="1" max="10">
+   <br>
+
+    <h3>Access Level (5 is a high access level and 1 is low)</h3>
+   <input type="number" name="AccessLevel"  value="1" "min="1" max="5">
+   <br>
+   <h3>Start Date</h3>
+  <input type="datetime-local" name="StartDate" required placeholder="YYYY-MM-DDTHH:MM">
+  <br>
+  <h3>End Date</h3>
+  <input type="datetime-local" name="EndDate" required placeholder="YYYY-MM-DDTHH:MM">
+  <br>
+  <h3>Reminder</h3>
+  <input type="datetime-local" name="Reminder" required placeholder="YYYY-MM-DDTHH:MM">
+  <br>
+  <input type ="submit" value="Create">
+</form>
+
+
+#endif
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<script>
+
+document.getElementById('userSearchAssignedTo').addEventListener('keyup', function() {
+  var searchValue = this.value.toLowerCase();
+  var options = document.getElementById('AssignedTo').options;
+  console.log(options);
+  for (var i = 0; i < options.length; i++) {
+    // Extracts the username from the option text
+    var username = options[i].innerText.toLowerCase();
+    
+    // Checks if the username includes the search value
+    var isMatch = username.indexOf(searchValue) > -1;
+    options[i].disabled = !isMatch
+  }
+});
+
+document.getElementById('AssignedToUserSearchUpdate').addEventListener('keyup', function() {
+  var searchValue = this.value.toLowerCase();
+  var options = document.getElementById('AssignedToUpdate').options;
+  console.log(options);
+  for (var i = 0; i < options.length; i++) {
+    // Extracts the username from the option text
+    var username = options[i].innerText.toLowerCase();
+    
+    // Checks if the username includes the search value
+    var isMatch = username.indexOf(searchValue) > -1;
+    options[i].disabled = !isMatch
+  }
+});
+
+</script>
+
+
+
+</BODY>
+</HTML>

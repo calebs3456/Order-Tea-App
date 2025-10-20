@@ -1,0 +1,362 @@
+
+
+<HTML>
+
+
+<HEAD>
+<TITLE>To Do List</TITLE>
+<style>
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+table {
+    width: 75%;
+    margin-bottom: 20px;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #3399ff;
+    color: white;
+}
+
+.subtask {
+    background-color: #f2f2f2;
+}
+
+input[type="text"], input[type="number"], input[type="datetime-local"], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type="submit"], button {
+    width: 100%;
+    background-color: #3399ff;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+h1 {
+        text-align: center;
+        font-weight: bold; 
+    }
+h2 {
+        text-align: center;
+        font-weight: bold;
+    }
+input[type="submit"]:hover, button:hover {
+    background-color: #0059b3;
+}
+
+.form-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.subtask{
+background-color: grey;
+}
+
+#change-factors-list li {
+  margin: 8px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+  cursor: move;
+}
+
+.dragging {
+  opacity: 0.5;
+  background-color: lightblue;
+}
+
+
+</style>
+
+</HEAD>
+
+<BODY>
+
+<form action="http://127.0.0.1:8080/group">
+    <input type="submit" value="Go Back" />
+</form>
+
+<h1>Tasks</h1>
+
+
+<table style ="width:75%">
+
+<tr>
+
+<th>Task Name</th style="bold">
+<th>Description</th>
+<th>Delete</th>
+</tr>
+
+
+#for(unit in tasks):
+#if(unit.id=="a8f47b52-64fe-11ee-b226-1a6dd2d7c03d-d786629a-6757-11ee-b226-1a6dd2d7c03d"):
+#else:
+
+#if(unit.SubtaskNumber>0):
+<tr class="subtask">
+#else:
+<tr>
+#endif
+<td>#(unit.title)</td>
+<td>#(unit.description)</td>
+
+<td>
+<form id="deleteForm" method="POST" action="http://127.0.0.1:8080/tasks/delete" enctype="application/x-www-form-urlencoded" onSubmit="window.location = 'http://127.0.0.1:8080/tasks'">
+<input type="hidden" value = #(unit.id) name="TaskID">
+<input type="hidden" value = #(unit.SubtaskNumber) name="subtaskNumber">
+<input type ="submit" value="Delete">
+</form>
+</td>
+<td>
+<form id="moreOptionsForm" method="POST" enctype="application/x-www-form-urlencoded" action="http://127.0.0.1:8080/tasks/options">
+<input type="hidden" value = #(unit.id) name="id">
+<input type="hidden" value = #(unit.SubtaskNumber) name="SubtaskNumber">
+<input type ="submit" value="More Options">
+</form>
+</td>
+</tr>
+#endif
+#endfor
+
+
+</table>
+<h2>Create Task</h2>
+<form id="createForm" method="POST" action="http://127.0.0.1:8080/tasks/create" enctype="application/x-www-form-urlencoded" onSubmit="window.location = 'http://127.0.0.1:8080/tasks'">
+  
+  <input type="text" name="Title" placeholder="Name" maxlength="250">
+  <br>
+  <input type="text" name="Description" placeholder="Description" maxlength="250">
+  <br>
+  
+
+    <br>
+   <h3>Assigned Priority (10 is a high priority and 1 is low)</h3>
+  <input type="number" name="AssignedPriority"  min="1" max="10">
+   <br>
+  <input type="hidden" name="SubtaskNumber"  value="0">
+   <br>
+   <h3>Access Level (5 is a high access level and 1 is low)</h3>
+   <input type="number" name="AccessLevel"  value="1" "min="1" max="5">
+   <br>
+   <h3>Start Date</h3>
+  <input type="datetime-local" name="StartDate" required placeholder="YYYY-MM-DDTHH:MM">
+  <br>
+  <h3>End Date</h3>
+  <input type="datetime-local" name="EndDate" required placeholder="YYYY-MM-DDTHH:MM">
+  <br>
+  <h3>Reminder</h3>
+  <input type="datetime-local" name="Reminder" required placeholder="YYYY-MM-DDTHH:MM">
+  <br>
+  <label for="AssignedTo">Assigned To:</label>
+  <input type="text" id="userSearchAssignedTo" placeholder="Search users...">
+  <select name="AssignedTo" id="AssignedTo" multiple>
+  #for(user in groupUsers):
+  <option value="#(user.id)">#(user.username)</option>
+  #endfor
+  </select>
+
+
+  
+  <br> 
+  <br>
+  <br>
+  <br>
+
+  
+  <input type ="submit" value="Create">
+</form>
+
+#if(controllingUser.accessLevel >= 4):
+<h2>Add User</h2>
+<form id="addUserToGroup" method="POST" action="http://127.0.0.1:8080/tasks/addUser" enctype="application/x-www-form-urlencoded">
+<label for="userID">User ID:</label>
+<input type="text" id="userSearchAdd" placeholder="Search users...">
+<select name="userID" id="userID" multiple>
+#for(user in nonGroupUsers):
+<option value="#(user.id)">#(user.username)</option>
+#endfor
+</select>
+<br>
+<h3>Access Level (5 is a high access level and 1 is low)</h3>
+<input type="number" name="accessLevel"  min="1" max="5">
+<br>
+<input type ="submit" value="Add">
+</form>
+#endif
+
+
+<! UL stands for unordered list and li is an element in a list>
+
+<br>
+<h1>Change Factors</h1>
+
+<div class="change-factors">
+<ul id="change-factors-list">
+  <li draggable="true" data-id="EndDate"><input type="checkbox" class="item-checkbox" checked>End Date</li>
+  <li draggable="true" data-id="StartDate"><input type="checkbox" class="item-checkbox" checked>Start Date</li>
+  <li draggable="true" data-id="AssignedPriority"><input type="checkbox" class="item-checkbox" checked>Assigned Priority</li>
+  <li draggable="true" data-id="AccessLevel"><input type="checkbox" class="item-checkbox" checked>Access Level</li>
+  <li draggable="true" data-id="Progress"><input type="checkbox" class="item-checkbox" checked>Progress</li>
+</ul>
+<form id="change-factors-form" onSubmit="window.location = 'http://127.0.0.1:8080/tasks'">
+    <input type="submit" id="change-factors-submit-button" value="Submit">
+</form>
+</div>
+
+<script>
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const list = document.getElementById('change-factors-list');
+
+    // Binding events to the list, and using event delegation for the list items
+    list.addEventListener('dragstart', (event) => {
+        if (event.target && event.target.nodeName === 'LI') {
+            event.dataTransfer.setData('text/plain', event.target.dataset.id);
+            setTimeout(() => event.target.classList.add('dragging'), 0);
+        }
+    });
+
+    list.addEventListener('dragover', (event) => {
+        event.preventDefault(); // Necessary to allow dropping
+    });
+
+    list.addEventListener('dragend', (event) => {
+        if (event.target && event.target.nodeName === 'LI') {
+            event.target.classList.remove('dragging');
+        }
+    });
+
+    list.addEventListener('drop', (event) => {
+        event.preventDefault();
+        const id = event.dataTransfer.getData('text/plain');
+        const draggedElement = document.querySelector(`.dragging`);
+        if (draggedElement) {
+            const afterElement = getDragAfterElement(list, event.clientY);
+            if (afterElement == null) {
+                list.appendChild(draggedElement);
+            } else {
+                list.insertBefore(draggedElement, afterElement);
+            }
+        }
+    });
+
+    function getDragAfterElement(list, y) {
+        const draggableElements = [...list.querySelectorAll('li:not(.dragging)')];
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+    
+    
+    document.getElementById('change-factors-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+    console.log("Button clicked");
+    
+    const listItems = document.getElementById('change-factors-list').querySelectorAll('li');
+    const itemData = Array.from(listItems).reduce((acc, item, index) => {
+        const checkbox = item.querySelector('.item-checkbox');
+        if (checkbox && checkbox.checked) {
+            acc.push({
+                id: item.getAttribute('data-id'),
+            });
+        }
+        return acc;
+    }, []);
+    
+    const DictData = {
+    factors: itemData
+    };
+    console.log(DictData);
+
+    // Send a POST request to changeFactorsALL
+    fetch('http://127.0.0.1:8080/tasks/changeFactorTasks', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(DictData)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => console.log('Success:', data))
+    .catch((error) => console.error('Error:', error));
+});
+
+
+
+    
+});
+
+
+document.getElementById('userSearchAssignedTo').addEventListener('keyup', function() {
+  var searchValue = this.value.toLowerCase();
+  var options = document.getElementById('AssignedTo').options;
+  console.log(options);
+  for (var i = 0; i < options.length; i++) {
+    // Extracts the username from the option text
+    var username = options[i].innerText.toLowerCase();
+    
+    // Checks if the username includes the search value
+    var isMatch = username.indexOf(searchValue) > -1;
+    options[i].disabled = !isMatch
+  }
+});
+
+document.getElementById('userSearchAdd').addEventListener('keyup', function() {
+  var searchValue = this.value.toLowerCase();
+  var options = document.getElementById('userID').options;
+  console.log(options);
+  for (var i = 0; i < options.length; i++) {
+    // Extracts the username from the option text
+    var username = options[i].innerText.toLowerCase();
+    
+    // Checks if the username includes the search value
+    var isMatch = username.indexOf(searchValue) > -1;
+    options[i].disabled = !isMatch
+  }
+});
+
+
+</script>
+</BODY>
+
+</HTML>
+

@@ -1,0 +1,110 @@
+<HTML>
+<style>
+
+table, th, td {
+border: 1px solid black;
+
+}
+th{
+color: blue;
+}
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    margin-top: 50px;
+        text-align: center;
+}
+
+.form-section {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+    text-align:center;
+}
+
+input[type="text"], input[type="password"] {
+    width: 90%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+input[type="submit"] {
+    width: 90%;
+    background-color: #3399ff;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #0059b3;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+
+#wholeForm {
+    background-color: white;
+}
+
+</style>
+
+<HEAD>
+<TITLE>To Do List</TITLE>
+
+</HEAD>
+
+<BODY>
+
+<h1>Order Tea</h1>
+<div id="wholeForm">
+<H1>Login</H1>
+<form id="loginForm" method="POST" action="http://127.0.0.1:8080/user/login" enctype="application/x-www-form-urlencoded">
+  
+  <input type="text" name="Username" placeholder="username" maxlength="250">
+  <br>
+  <input type="text" name="Password" placeholder="password" maxlength="250">
+  <input type ="submit" value="Login">
+</form>
+
+<H1>Create new user</H1>
+<form id="loginForm" method="POST" action="http://127.0.0.1:8080/user/createUser" enctype="application/x-www-form-urlencoded">
+  
+  <input type="text" name="username" placeholder="username" maxlength="250">
+  <br>
+  <input type="text" name="password" placeholder="password" maxlength="250">
+  <input type ="submit" value="Create User">
+</form>
+</div>
+
+</BODY>
+
+
+
+</HTML>
